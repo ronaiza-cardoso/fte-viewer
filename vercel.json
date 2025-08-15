@@ -9,38 +9,40 @@
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "source": "/static/(.*)",
+      "destination": "/static/$1"
     },
     {
-      "src": "/favicon.ico",
-      "dest": "/favicon.ico"
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/favicon.ico",
+      "destination": "/favicon.ico"
     },
     {
-      "src": "/manifest.json",
-      "dest": "/manifest.json"
+      "source": "/manifest.json",
+      "destination": "/manifest.json"
     },
     {
-      "src": "/logo192.png",
-      "dest": "/logo192.png"
+      "source": "/logo192.png",
+      "destination": "/logo192.png"
     },
     {
-      "src": "/logo512.png",
-      "dest": "/logo512.png"
+      "source": "/logo512.png",
+      "destination": "/logo512.png"
     },
     {
-      "src": "/robots.txt",
-      "dest": "/robots.txt"
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
     },
     {
-      "src": "/all_fte_data.json",
-      "dest": "/all_fte_data.json"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/all_fte_data.json",
+      "destination": "/all_fte_data.json"
     }
   ],
   "headers": [

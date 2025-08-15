@@ -9,9 +9,6 @@ import {
   TextField,
   InputAdornment,
   IconButton,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Chip,
   Divider,
   Paper,
@@ -23,8 +20,6 @@ import {
   TableRow,
   CircularProgress,
   Alert,
-  Tabs,
-  Tab,
   Button,
   Dialog,
   DialogTitle,
@@ -36,7 +31,6 @@ import {
   MenuItem,
   Badge,
   Tooltip,
-  CardActions,
   Stack,
   LinearProgress,
   Link,
@@ -49,10 +43,7 @@ import {
   Category as CategoryIcon,
   Download as DownloadIcon,
   Analytics as AnalyticsIcon,
-  FilterList as FilterIcon,
   Clear as ClearIcon,
-  Info as InfoIcon,
-  TrendingUp as TrendingUpIcon,
   Business as BusinessIcon,
   OpenInNew as OpenInNewIcon,
 } from "@mui/icons-material";
@@ -64,10 +55,8 @@ function App() {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedItems, setExpandedItems] = useState({});
-  const [activeTab, setActiveTab] = useState(0);
   const [filterCnaeType, setFilterCnaeType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
-  const [showStats, setShowStats] = useState(false);
   const [statsDialogOpen, setStatsDialogOpen] = useState(false);
 
   useEffect(() => {
