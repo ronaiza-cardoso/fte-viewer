@@ -1,0 +1,31 @@
+# Core dependencies for FTE Viewer Backend
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Data processing and display
+ipython>=8.0.0
+jupyter>=1.0.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Optional: Enhanced functionality
+pandas>=2.0.0
+numpy>=1.24.0
+python-dotenv>=1.0.0
+
+# Web scraping enhancements
+selenium>=4.0.0
+webdriver-manager>=4.0.0
+
+# Data validation
+pydantic>=2.0.0
+jsonschema>=4.17.0
+
+# Logging and monitoring
+loguru>=0.7.0
+rich>=13.0.0
