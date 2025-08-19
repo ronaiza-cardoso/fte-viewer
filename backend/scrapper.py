@@ -206,12 +206,28 @@ def get_page_content(url):
         return None
 
 def find_fte_links(soup):
-    fte_links = []
-    # Find all links with class 'plgBotao' that contain "FTE" in their text
-    for link in soup.find_all('a', class_='plgBotao'):
-        if 'fte' in link.get_text().lower():
-            if link.get('href'):
-                fte_links.append(link['href'])
+    # Collect links using three methods and deduplicate
+    links_set = set()
+
+    # 1) By class: "plgBotao external-link"
+    for link in soup.select('a.plgBotao.external-link'):
+        href = link.get('href')
+        if href:
+            links_set.add(href)
+
+    # 2) By anchor text exactly "Acesse a FTE"
+    # 3) By anchor text exactly "FTE"
+    for link in soup.find_all('a'):
+        text = link.get_text(strip=True)
+        if not text:
+            continue
+        normalized = text.lower()
+        if normalized == 'acesse a fte' or normalized == 'fte':
+            href = link.get('href')
+            if href:
+                links_set.add(href)
+
+    fte_links = list(links_set)
     return fte_links
 
 # List of URLs to process
