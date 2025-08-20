@@ -491,7 +491,9 @@ function App() {
 
   const fetchFteData = async () => {
     try {
-      const response = await fetch("/all_fte_data.json");
+      // Use the correct path for GitHub Pages deployment
+      const basePath = process.env.PUBLIC_URL || '';
+      const response = await fetch(`${basePath}/all_fte_data.json`);
       if (!response.ok) {
         throw new Error("Failed to fetch FTE data");
       }
