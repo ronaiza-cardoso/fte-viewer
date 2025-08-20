@@ -450,10 +450,7 @@ const FTE_CODE_CATEGORIES = {
   Pesticidas: ["15-11", "17-61", "18-66", "18-80", "21-5", "21-47", "21-66"],
 };
 
-// Get unique categories for filter dropdown
-const getUniqueCategories = () => {
-  return Object.keys(FTE_CODE_CATEGORIES).sort();
-};
+
 
 // Function to get FTE category from code using the new structure
 const getFteCategory = (codigo) => {
