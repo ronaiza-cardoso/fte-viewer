@@ -34,6 +34,8 @@ import {
   Stack,
   LinearProgress,
   Link,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import {
   Search as SearchIcon,
@@ -46,18 +48,625 @@ import {
   Clear as ClearIcon,
   Business as BusinessIcon,
   OpenInNew as OpenInNewIcon,
+  ViewList as ViewListIcon,
+  Group as GroupIcon,
 } from "@mui/icons-material";
 import "./App.css";
 
+// FTE Code to Title mapping
+const FTE_CODE_TITLES = {
+  "1 – 1": "Pesquisa mineral com guia de utilização",
+  "1 – 2":
+    "Lavra a céu aberto, inclusive de aluvião, com ou sem beneficiamento",
+  "1 – 3": "Lavra subterrânea com ou sem beneficiamento",
+  "1 – 4": "Lavra garimpeira",
+  "1 – 5": "Perfuração de poços e produção de petróleo e gás natural",
+  "1 – 7":
+    "Lavra garimpeira - Decreto nº 97.507/1989 - Utilização de mercúrio metálico",
+  "2 – 1": "Beneficiamento de minerais não-metálicos não associados à extração",
+  "2 – 2": "Fabricação e elaboração de produtos minerais não-metálicos",
+  "3 – 1": "Fabricação de aço e de produtos siderúrgicos",
+  "3 – 2": "Produção de fundidos de ferro e aço, forjados, arames, relaminados",
+  "3 – 3":
+    "Metalurgia dos metais não-ferrosos em formas primárias e secundárias",
+  "3 – 4": "Produção de laminados, ligas, artefatos de metais não-ferrosos",
+  "3 – 5": "Relaminagem de metais não-ferrosos, inclusive ligas",
+  "3 – 6": "Produção de soldas e ânodos",
+  "3 – 7": "Metalurgia de metais preciosos",
+  "3 – 8": "Metalurgia do pó, inclusive peças moldadas",
+  "3 – 9": "Fabricação de estruturas metálicas",
+  "3 – 10": "Fabricação de artefatos de ferro, aço e metais não-ferrosos",
+  "3 – 11": "Têmpera e cementação de aço, recozimento de arames",
+  "3 – 12":
+    "Metalurgia de metais preciosos - Decreto nº 97.634/1989 - Utilização de mercúrio metálico",
+  "4 – 1": "Fabricação de máquinas, aparelhos, peças, utensílios e acessórios",
+  "5 – 1": "Fabricação de pilhas, baterias e outros acumuladores",
+  "5 – 2":
+    "Fabricação de material elétrico, eletrônico e equipamentos para telecomunicação",
+  "5 – 3": "Fabricação de aparelhos elétricos e eletrodomésticos",
+  "5 – 4":
+    "Fabricação de material elétrico, eletrônico e equipamentos para telecomunicação - Lei nº 12.305/2010",
+  "6 – 1": "Fabricação e montagem de veículos rodoviários e ferroviários",
+  "6 – 2": "Fabricação e montagem de aeronaves",
+  "6 – 3": "Fabricação e reparo de embarcações e estruturas flutuantes",
+  "7 – 1": "Serraria e desdobramento de madeira",
+  "7 – 2": "Preservação de madeira",
+  "7 – 3":
+    "Fabricação de chapas, placas de madeira aglomerada, prensada e compensada",
+  "7 – 4": "Fabricação de estruturas de madeira e móveis",
+  "8 – 1": "Fabricação de celulose e pasta mecânica",
+  "8 – 2": "Fabricação de papel e papelão",
+  "8 – 3":
+    "Fabricação de artefatos de papel, papelão, cartolina, cartão e fibra prensada",
+  "9 – 1": "Beneficiamento de borracha natural",
+  "9 – 3": "Fabricação de laminados e fios de borracha",
+  "9 – 4": "Fabricação de espuma de borracha e artefatos de espuma de borracha",
+  "9 – 5": "Fabricação de câmara de ar",
+  "9 – 6": "Fabricação de pneumáticos",
+  "9 – 7": "Recondicionamento de pneumáticos",
+  "10 – 1": "Secagem e salga de couros e peles",
+  "10 – 2": "Curtimento e outras preparações de couros e peles",
+  "10 – 3": "Fabricação de artefatos diversos de couros e peles",
+  "10 – 4": "Fabricação de cola animal",
+  "11 – 1":
+    "Beneficiamento de fibras têxteis vegetais, de origem animal e sintéticas",
+  "11 – 2": "Fabricação e acabamento de fios e tecidos",
+  "11 – 3": "Tingimento, estamparia e outros acabamentos em peças do vestuário",
+  "11 – 4": "Fabricação de calçados e componentes para calçados",
+  "12 – 1": "Fabricação de laminados plásticos",
+  "12 – 2": "Fabricação de artefatos de material plástico",
+  "13 – 1": "Fabricação de cigarros, charutos, cigarrilhas e outras atividades",
+  "14 – 1": "Usinas de produção de concreto",
+  "14 – 2": "Usinas de produção de asfalto",
+  "15 – 1": "Produção de substâncias e fabricação de produtos químicos",
+  "15 – 2":
+    "Fabricação de produtos derivados do processamento de petróleo, de rochas betuminosas e da madeira",
+  "15 – 3": "Fabricação de combustíveis não derivados de petróleo",
+  "15 – 4": "Produção de óleos, gorduras, ceras vegetais e animais",
+  "15 – 5": "Fabricação de resinas e de fibras e fios artificiais e sintéticos",
+  "15 – 6":
+    "Fabricação de pólvora, explosivos, detonantes, munição para caça e desporto",
+  "15 – 7":
+    "Recuperação e refino de solventes, óleos minerais, vegetais e animais",
+  "15 – 8":
+    "Fabricação de concentrados aromáticos naturais, artificiais e sintéticos",
+  "15 – 9": "Fabricação de preparados para limpeza e polimento, desinfetantes",
+  "15 – 10":
+    "Fabricação de tintas, esmaltes, lacas, vernizes, impermeabilizantes",
+  "15 – 11": "Fabricação de fertilizantes e agroquímicos",
+  "15 – 12": "Fabricação de produtos farmacêuticos e veterinários",
+  "15 – 13": "Fabricação de sabões, detergentes e velas",
+  "15 – 14": "Fabricação de perfumarias e cosméticos",
+  "15 – 15": "Produção de álcool etílico, metanol e similares",
+  "15 – 17":
+    "Produção de substâncias e fabricação de produtos químicos (preservativos de madeira)",
+  "15 – 20":
+    "Produção de substâncias e fabricação de produtos químicos (utilização de mercúrio metálico)",
+  "15 – 21":
+    "Produção de substâncias e fabricação de produtos químicos (remediador/dispersante químico)",
+  "15 – 23":
+    "Fabricação de produtos derivados do processamento de petróleo (rerrefino de óleo lubrificante usado)",
+  "16 – 1":
+    "Beneficiamento, moagem, torrefação e fabricação de produtos alimentares",
+  "16 – 2":
+    "Matadouros, abatedouros, frigoríficos, charqueadas e derivados de origem animal",
+  "16 – 3": "Fabricação de conservas",
+  "16 – 4": "Preparação de pescados e fabricação de conservas de pescados",
+  "16 – 5": "Beneficiamento e industrialização de leite e derivados",
+  "16 – 6": "Fabricação e refinação de açúcar",
+  "16 – 7": "Refino e preparação de óleo e gorduras vegetais",
+  "16 – 8":
+    "Produção de manteiga, cacau, gorduras de origem animal para alimentação",
+  "16 – 9": "Fabricação de fermentos e leveduras",
+  "16 – 10":
+    "Fabricação de rações balanceadas e de alimentos preparados para animais",
+  "16 – 11": "Fabricação de vinhos e vinagre",
+  "16 – 12": "Fabricação de cervejas, chopes e maltes",
+  "16 – 13":
+    "Fabricação de bebidas não alcoólicas, engarrafamento e gaseificação",
+  "16 – 14": "Fabricação de bebidas alcoólicas",
+  "16 – 15":
+    "Matadouros, abatedouros, frigoríficos, charqueadas e derivados de origem animal (fauna silvestre/fauna exótica)",
+  "16 – 16":
+    "Matadouros, abatedouros, frigoríficos, charqueadas e derivados de origem animal (fauna silvestre/fauna exótica)",
+  "17 – 1": "Produção de energia termoelétrica",
+  "17 – 4":
+    "Destinação de resíduos de esgotos sanitários e de resíduos sólidos urbanos",
+  "17 – 5": "Dragagem e derrocamentos em corpos d'água",
+  "17 – 57":
+    "Tratamento e destinação de resíduos industriais líquidos e sólidos - Decreto nº 7.404/2010",
+  "17 – 58":
+    "Tratamento e destinação de resíduos industriais líquidos e sólidos - Lei nº 12.305/2010",
+  "17 – 59":
+    "Tratamento e destinação de resíduos industriais líquidos e sólidos - Lei nº 12.305/2010",
+  "17 – 60":
+    "Tratamento e destinação de resíduos industriais líquidos e sólidos - Lei nº 12.305/2010",
+  "17 – 61": "Disposição de resíduos especiais - Lei nº 12.305/2010",
+  "17 – 62": "Disposição de resíduos especiais - Lei nº 12.305/2010",
+  "17 – 63": "Disposição de resíduos especiais - Lei nº 12.305/2010",
+  "17 – 64": "Disposição de resíduos especiais - Lei nº 6.938/1981",
+  "17 – 65": "Disposição de resíduos especiais - Lei nº 12.305/2010",
+  "17 – 66": "Disposição de resíduos especiais (Protocolo de Montreal)",
+  "17 – 67": "Recuperação de áreas degradadas",
+  "17 – 68": "Recuperação de áreas contaminadas",
+  "17 – 69":
+    "Tratamento e destinação de resíduos industriais líquidos e sólidos - Lei Complementar nº 140/2011",
+  "18 – 1": "Transporte de cargas perigosas",
+  "18 – 2": "Transporte por dutos",
+  "18 – 3": "Marinas, portos e aeroportos",
+  "18 – 4": "Terminais de minério, petróleo e derivados e produtos químicos",
+  "18 – 5": "Depósito de produtos químicos e produtos perigosos",
+  "18 – 6": "Comércio de combustíveis e derivados de petróleo",
+  "18 – 7": "Comércio de produtos químicos e produtos perigosos",
+  "18 – 8":
+    "Comércio de produtos químicos e produtos perigosos - Decreto nº 97.634/1989 - Mercúrio metálico",
+  "18 – 10":
+    "Comércio de produtos químicos e produtos perigosos - Protocolo de Montreal",
+  "18 – 13":
+    "Comércio de produtos químicos e produtos perigosos - Resolução Conama nº 362/2005",
+  "18 – 14": "Transporte de cargas perigosas - Resolução Conama nº 362/2005",
+  "18 – 17":
+    "Comércio de produtos químicos e produtos perigosos - Convenção de Estocolmo",
+  "18 – 37": "Comércio de produtos químicos e produtos perigosos",
+  "18 – 64":
+    "Comércio de produtos químicos e produtos perigosos - Resolução Conama nº 463/2014",
+  "18 – 66":
+    "Comércio de produtos químicos e produtos perigosos - Lei nº 7.802/1989 - Agrotóxicos",
+  "18 – 74": "Transporte de cargas perigosas (resíduos perigosos)",
+  "18 – 79":
+    "Comércio de produtos químicos e produtos perigosos (exportação de resíduos perigosos)",
+  "18 – 80":
+    "Depósito de produtos químicos e produtos perigosos - Lei nº 12.305/2010",
+  "18 – 81":
+    "Comércio de produtos químicos e produtos perigosos - Resolução Conama nº 401/2008",
+  "18 – 83":
+    "Transporte de cargas perigosas (material radiativo/rejeito radiativo)",
+  "18 – 84":
+    "Depósito de produtos químicos e produtos perigosos - Lei Complementar nº 140/2011",
+  "19 – 1": "Complexos turísticos e de lazer, inclusive parques temáticos",
+  "20 – 2": "Exploração econômica da madeira ou lenha e subprodutos florestais",
+  "20 – 5": "Utilização do patrimônio genético natural",
+  "20 – 6": "Exploração de recursos aquáticos vivos",
+  "20 – 21": "Importação ou exportação de fauna nativa brasileira",
+  "20 – 22": "Importação ou exportação de flora nativa brasileira",
+  "20 – 23":
+    "Atividade de criação e exploração econômica de fauna exótica e de fauna silvestre",
+  "20 – 25":
+    "Atividade de criação e exploração econômica de fauna exótica e de fauna silvestre",
+  "20 – 26":
+    "Introdução de espécies exóticas, exceto para melhoramento genético vegetal",
+  "20 – 35":
+    "Introdução de espécies geneticamente modificadas previamente identificadas pela CTNBio",
+  "20 – 37":
+    "Uso da diversidade biológica pela biotecnologia em atividades previamente identificadas pela CTNBio",
+  "20 – 54":
+    "Exploração de recursos aquáticos vivos - Lei nº 11.959/2009 - Aquicultura",
+  "20 – 60": "Silvicultura - Lei nº 12.651/2012",
+  "20 – 61": "Silvicultura - Lei nº 12.651/2012",
+  "20 – 63":
+    "Exploração econômica da madeira ou lenha e subprodutos florestais",
+  "20 – 81":
+    "Atividade de criação e exploração econômica de fauna exótica e de fauna silvestre",
+  "21 – 3":
+    "Utilização técnica de substâncias controladas - Protocolo de Montreal",
+  "21 – 5": "Experimentação com agroquímicos - Lei nº 7.802/1989",
+  "21 – 27": "Porte e uso de motosserra - Lei nº 12.651/2012",
+  "21 – 30": "Operação de rodovia - Lei nº 6.938/1981",
+  "21 – 31": "Operação de hidrovia - Lei nº 6.938/1981",
+  "21 – 32": "Operação de aeródromo - Lei nº 6.938/1981",
+  "21 – 33": "Estações de tratamento de água - Lei nº 6.938/1981",
+  "21 – 34": "Transmissão de energia elétrica - Lei nº 6.938/1981",
+  "21 – 35": "Geração de energia hidrelétrica - Lei nº 6.938/1981",
+  "21 – 36":
+    "Geração de energia eólica e de outras fontes alternativas - Lei nº 6.938/1981",
+  "21 – 37": "Distribuição de energia elétrica - Lei nº 6.938/1981",
+  "21 – 40": "Comércio exterior de resíduos controlados - Decreto nº 875/1993",
+  "21 – 41":
+    "Importação de lâmpadas fluorescentes, de vapor de sódio e mercúrio e de luz mista",
+  "21 – 42": "Importação de eletrodomésticos - Resolução Conama nº 20/1994",
+  "21 – 43":
+    "Importação de veículos automotores para uso próprio - Lei nº 8.723/1993",
+  "21 – 44":
+    "Importação de veículos automotores para fins de comercialização - Lei nº 8.723/1993",
+  "21 – 45": "Importação de pneus e similares - Resolução Conama nº 416/2009",
+  "21 – 46": "Controle de plantas aquáticas - Resolução Conama nº 467/2015",
+  "21 – 47": "Aplicação de agrotóxicos e afins - Lei nº 7.802/1989",
+  "21 – 48":
+    "Consumo industrial de madeira, de lenha e de carvão vegetal - Lei nº 12.651/2012",
+  "21 – 49": "Transporte de produtos florestais - Lei nº 12.651/2012",
+  "21 – 50": "Armazenamento de produtos florestais - Lei nº 12.651/2012",
+  "21 – 51":
+    "Formulação de produtos biorremediadores - Resolução Conama nº 463/2014",
+  "21 – 52": "Centro de triagem e reabilitação - Resolução Conama nº 489/2018",
+  "21 – 53":
+    "Manutenção de fauna silvestre ou exótica - Resolução Conama nº 489/2018",
+  "21 – 55":
+    "Criação científica de fauna exótica e de fauna silvestre - Resolução Conama nº 489/2018",
+  "21 – 56":
+    "Criação conservacionista de fauna silvestre - Resolução Conama nº 489/2018",
+  "21 – 57":
+    "Importação ou exportação de fauna exótica - Portaria Ibama nº 93/1998",
+  "21 – 58": "Manejo de fauna exótica invasora - Resolução Conabio nº 7/2018",
+  "21 – 59":
+    "Manejo de fauna sinantrópica nociva - Instrução Normativa Ibama nº 141/2006",
+  "21 – 60":
+    "Criação amadorista de passeriformes da fauna silvestre - Instrução Normativa Ibama nº 10/2011",
+  "21 – 62":
+    "Manutenção de área passível de Ato Declaratório Ambiental - Lei nº 6.938/1981",
+  "21 – 64":
+    "Exportação de carvão vegetal de espécies exóticas - Instrução Normativa Ibama nº 15/2011",
+  "21 – 66":
+    "Produção de agroquímicos de agentes biológicos e microbiológicos de controle",
+  "21 – 67":
+    "Comércio atacadista de madeira, de lenha e de outros produtos florestais - Lei nº 12.651/2012",
+  "21 – 68":
+    "Comércio varejista de madeira, de lenha e de outros produtos florestais - Lei nº 12.651/2012",
+  "21 – 69": "Comercialização de recursos pesqueiros - Lei nº 11.959/2009",
+  "21 – 70":
+    "Revenda de organismos aquáticos vivos ornamentais - Lei nº 11.959/2009",
+  "21 – 71":
+    "Empreendimento comercial de animais vivos da fauna silvestre ou fauna",
+  "21 – 72":
+    "Empreendimento comercial de partes, produtos e subprodutos da fauna silvestre ou exótica",
+  "21 – 73": "Comercialização de motosserra - Lei nº 12.651/2012",
+  "21 – 74": "Criação de animais - Lei nº 6.938/1981",
+  "21 – 75": "Irrigação - Resolução Conama nº 284/2001",
+  "21 – 79":
+    "Instalações nucleares e radiativas diversas - Lei Complementar nº 140/2011",
+  "21 – 92": "Silvicultura de espécie nativa - Lei nº 12.651/2012",
+  "21 – 93": "Silvicultura de espécie exótica - Lei nº 12.651/2012",
+  "22 – 1": "Rodovias, ferrovias, hidrovias, metropolitanos",
+  "22 – 2": "Construção de barragens e diques",
+  "22 – 3": "Construção de canais para drenagem",
+  "22 – 4": "Retificação do curso de água",
+  "22 – 5": "Abertura de barras, embocaduras e canais",
+  "22 – 6": "Transposição de bacias hidrográficas",
+  "22 – 7": "Construção de obras de arte",
+  "22 – 8": "Outras obras de infraestrutura",
+};
+
+// FTE Code to Category mapping
+const FTE_CODE_CATEGORIES = {
+  // Abastecimento de combustíveis
+  "18 – 5": "Abastecimento de combustíveis",
+  "18 – 6": "Abastecimento de combustíveis",
+
+  // Agrotóxicos
+  "15 – 11": "Agrotóxicos",
+  "17 – 61": "Agrotóxicos",
+  "18 – 66": "Agrotóxicos",
+  "18 – 80": "Agrotóxicos",
+  "21 – 5": "Agrotóxicos",
+  "21 – 47": "Agrotóxicos",
+  "21 – 66": "Agrotóxicos",
+
+  // Biotecnologia
+  "20 – 5": "Biotecnologia",
+  "20 – 35": "Biotecnologia",
+  "20 – 37": "Biotecnologia",
+  "21 – 51": "Biotecnologia",
+  "21 – 66": "Biotecnologia",
+
+  // Criação amadorista de passeriformes
+  "21 – 60": "Criação amadorista de passeriformes",
+
+  // Convenção de Basileia
+  "18 – 79": "Convenção de Basileia",
+  "21 – 40": "Convenção de Basileia",
+
+  // Energia Elétrica
+  "17 – 1": "Energia Elétrica",
+  "21 – 34": "Energia Elétrica",
+  "21 – 35": "Energia Elétrica",
+  "21 – 36": "Energia Elétrica",
+  "21 – 37": "Energia Elétrica",
+  "21 – 46": "Energia Elétrica",
+  "22 – 2": "Energia Elétrica",
+  "22 – 8": "Energia Elétrica",
+
+  // Empreendimentos - Instalação
+  "21 – 75": "Empreendimentos - Instalação",
+  "22 – 1": "Empreendimentos - Instalação",
+  "22 – 2": "Empreendimentos - Instalação",
+  "22 – 3": "Empreendimentos - Instalação",
+  "22 – 4": "Empreendimentos - Instalação",
+  "22 – 5": "Empreendimentos - Instalação",
+  "22 – 6": "Empreendimentos - Instalação",
+  "22 – 7": "Empreendimentos - Instalação",
+  "22 – 8": "Empreendimentos - Instalação",
+
+  // Fauna
+  "10 – 1": "Fauna",
+  "10 – 2": "Fauna",
+  "16 – 15": "Fauna",
+  "20 – 5": "Fauna",
+  "20 – 21": "Fauna",
+  "20 – 23": "Fauna",
+  "20 – 25": "Fauna",
+  "20 – 81": "Fauna",
+  "21 – 52": "Fauna",
+  "21 – 53": "Fauna",
+  "21 – 55": "Fauna",
+  "21 – 56": "Fauna",
+  "21 – 60": "Fauna",
+  "21 – 71": "Fauna",
+  "21 – 72": "Fauna",
+
+  // Fauna doméstica
+  "10 – 1": "Fauna doméstica",
+  "10 – 2": "Fauna doméstica",
+  "16 – 2": "Fauna doméstica",
+  "21 – 74": "Fauna doméstica",
+
+  // Fauna sinantrópica
+  "21 – 59": "Fauna sinantrópica",
+
+  // Fauna invasora
+  "20 – 26": "Fauna invasora",
+  "21 – 58": "Fauna invasora",
+
+  // Fauna - Recursos pesqueiros
+  "16 – 4": "Fauna - Recursos pesqueiros",
+  "20 – 5": "Fauna - Recursos pesqueiros",
+  "20 – 6": "Fauna - Recursos pesqueiros",
+  "20 – 54": "Fauna - Recursos pesqueiros",
+  "21 – 69": "Fauna - Recursos pesqueiros",
+  "21 – 70": "Fauna - Recursos pesqueiros",
+
+  // Flora e madeira
+  "7 – 1": "Flora e madeira",
+  "7 – 2": "Flora e madeira",
+  "7 – 3": "Flora e madeira",
+  "7 – 4": "Flora e madeira",
+  "15 – 2": "Flora e madeira",
+  "15 – 4": "Flora e madeira",
+  "20 – 2": "Flora e madeira",
+  "20 – 5": "Flora e madeira",
+  "20 – 22": "Flora e madeira",
+  "20 – 26": "Flora e madeira",
+  "20 – 63": "Flora e madeira",
+  "21 – 49": "Flora e madeira",
+  "21 – 48": "Flora e madeira",
+  "21 – 64": "Flora e madeira",
+  "21 – 67": "Flora e madeira",
+  "21 – 68": "Flora e madeira",
+  "21 – 92": "Flora e madeira",
+  "21 – 93": "Flora e madeira",
+
+  // Importação / Exportação
+  "18 – 8": "Importação / Exportação",
+  "18 – 10": "Importação / Exportação",
+  "18 – 13": "Importação / Exportação",
+  "18 – 17": "Importação / Exportação",
+  "18 – 66": "Importação / Exportação",
+  "18 – 81": "Importação / Exportação",
+  "20 – 21": "Importação / Exportação",
+  "20 – 22": "Importação / Exportação",
+  "21 – 41": "Importação / Exportação",
+  "21 – 42": "Importação / Exportação",
+  "21 – 43": "Importação / Exportação",
+  "21 – 44": "Importação / Exportação",
+  "21 – 45": "Importação / Exportação",
+  "21 – 57": "Importação / Exportação",
+  "21 – 64": "Importação / Exportação",
+
+  // Logística Reversa
+  "15 – 11": "Logística Reversa",
+  "17 – 61": "Logística Reversa",
+  "18 – 66": "Logística Reversa",
+  "18 – 74": "Logística Reversa",
+  "18 – 80": "Logística Reversa",
+  "20 – 5": "Logística Reversa",
+  "21 – 47": "Logística Reversa",
+  "21 – 66": "Logística Reversa",
+  "5 – 1": "Logística Reversa",
+  "17 – 62": "Logística Reversa",
+  "18 – 81": "Logística Reversa",
+  "9 – 6": "Logística Reversa",
+  "17 – 63": "Logística Reversa",
+  "21 – 45": "Logística Reversa",
+  "15 – 23": "Logística Reversa",
+  "18 – 13": "Logística Reversa",
+  "18 – 14": "Logística Reversa",
+  "5 – 4": "Logística Reversa",
+  "21 – 41": "Logística Reversa",
+
+  // Mercúrio metálico
+  "1 – 7": "Mercúrio metálico",
+  "3 – 12": "Mercúrio metálico",
+  "15 – 20": "Mercúrio metálico",
+  "18 – 8": "Mercúrio metálico",
+
+  // Mineração
+  "1 – 1": "Mineração",
+  "1 – 2": "Mineração",
+  "1 – 3": "Mineração",
+  "1 – 4": "Mineração",
+  "1 – 7": "Mineração",
+  "17 – 58": "Mineração",
+  "17 – 59": "Mineração",
+  "18 – 2": "Mineração",
+  "18 – 4": "Mineração",
+  "22 – 2": "Mineração",
+  "22 – 8": "Mineração",
+
+  // Óleo lubrificante
+  "15 – 2": "Óleo lubrificante",
+  "15 – 23": "Óleo lubrificante",
+  "18 – 13": "Óleo lubrificante",
+  "18 – 14": "Óleo lubrificante",
+  "18 – 80": "Óleo lubrificante",
+
+  // Patrimônio genético
+  "20 – 5": "Patrimônio genético",
+
+  // Pessoas físicas (PFs)
+  "1 – 1": "Pessoas físicas (PFs)",
+  "1 – 2": "Pessoas físicas (PFs)",
+  "1 – 4": "Pessoas físicas (PFs)",
+  "1 – 7": "Pessoas físicas (PFs)",
+  "17 – 1": "Pessoas físicas (PFs)",
+  "17 – 67": "Pessoas físicas (PFs)",
+  "18 – 1": "Pessoas físicas (PFs)",
+  "18 – 83": "Pessoas físicas (PFs)",
+  "20 – 2": "Pessoas físicas (PFs)",
+  "20 – 5": "Pessoas físicas (PFs)",
+  "20 – 6": "Pessoas físicas (PFs)",
+  "20 – 21": "Pessoas físicas (PFs)",
+  "20 – 22": "Pessoas físicas (PFs)",
+  "20 – 23": "Pessoas físicas (PFs)",
+  "20 – 26": "Pessoas físicas (PFs)",
+  "20 – 35": "Pessoas físicas (PFs)",
+  "20 – 54": "Pessoas físicas (PFs)",
+  "20 – 63": "Pessoas físicas (PFs)",
+  "20 – 81": "Pessoas físicas (PFs)",
+  "21 – 27": "Pessoas físicas (PFs)",
+  "21 – 32": "Pessoas físicas (PFs)",
+  "21 – 35": "Pessoas físicas (PFs)",
+  "21 – 36": "Pessoas físicas (PFs)",
+  "21 – 43": "Pessoas físicas (PFs)",
+  "21 – 45": "Pessoas físicas (PFs)",
+  "21 – 46": "Pessoas físicas (PFs)",
+  "21 – 47": "Pessoas físicas (PFs)",
+  "21 – 49": "Pessoas físicas (PFs)",
+  "21 – 53": "Pessoas físicas (PFs)",
+  "21 – 56": "Pessoas físicas (PFs)",
+  "21 – 57": "Pessoas físicas (PFs)",
+  "21 – 58": "Pessoas físicas (PFs)",
+  "21 – 59": "Pessoas físicas (PFs)",
+  "21 – 60": "Pessoas físicas (PFs)",
+  "21 – 62": "Pessoas físicas (PFs)",
+  "21 – 74": "Pessoas físicas (PFs)",
+  "21 – 75": "Pessoas físicas (PFs)",
+  "21 – 92": "Pessoas físicas (PFs)",
+  "21 – 93": "Pessoas físicas (PFs)",
+
+  // Petróleo, gás e derivados
+  "1 – 5": "Petróleo, gás e derivados",
+  "15 – 2": "Petróleo, gás e derivados",
+  "15 – 23": "Petróleo, gás e derivados",
+  "18 – 1": "Petróleo, gás e derivados",
+  "18 – 2": "Petróleo, gás e derivados",
+  "18 – 4": "Petróleo, gás e derivados",
+  "18 – 5": "Petróleo, gás e derivados",
+  "18 – 6": "Petróleo, gás e derivados",
+  "18 – 13": "Petróleo, gás e derivados",
+  "18 – 14": "Petróleo, gás e derivados",
+  "18 – 74": "Petróleo, gás e derivados",
+  "18 – 80": "Petróleo, gás e derivados",
+  "22 – 8": "Petróleo, gás e derivados",
+
+  // Pilhas e baterias
+  "5 – 1": "Pilhas e baterias",
+  "17 – 62": "Pilhas e baterias",
+  "18 – 81": "Pilhas e baterias",
+
+  // Pneus
+  "9 – 6": "Pneus",
+  "9 – 7": "Pneus",
+  "17 – 63": "Pneus",
+  "21 – 45": "Pneus",
+
+  // Preservativo de madeira
+  "7 – 2": "Preservativo de madeira",
+  "15 – 17": "Preservativo de madeira",
+  "18 – 17": "Preservativo de madeira",
+
+  // Protocolo de Montreal
+  "17 – 66": "Protocolo de Montreal",
+  "18 – 1": "Protocolo de Montreal",
+  "18 – 10": "Protocolo de Montreal",
+  "21 – 3": "Protocolo de Montreal",
+
+  // Radioativos
+  "18 – 83": "Radioativos",
+  "1 – 1": "Radioativos",
+  "1 – 2": "Radioativos",
+  "1 – 3": "Radioativos",
+  "1 – 5": "Radioativos",
+  "3 – 3": "Radioativos",
+  "3 – 9": "Radioativos",
+  "6 – 3": "Radioativos",
+  "15 – 1": "Radioativos",
+  "15 – 12": "Radioativos",
+  "17 – 1": "Radioativos",
+  "17 – 68": "Radioativos",
+  "17 – 69": "Radioativos",
+  "18 – 84": "Radioativos",
+  "21 – 79": "Radioativos",
+  "22 – 2": "Radioativos",
+  "22 – 8": "Radioativos",
+
+  // Remediadores / Dispersantes químicos
+  "15 – 21": "Remediadores / Dispersantes químicos",
+  "18 – 64": "Remediadores / Dispersantes químicos",
+  "21 – 51": "Remediadores / Dispersantes químicos",
+
+  // Resíduos industriais
+  "17 – 57": "Resíduos industriais",
+  "17 – 58": "Resíduos industriais",
+  "17 – 59": "Resíduos industriais",
+  "17 – 60": "Resíduos industriais",
+  "22 – 2": "Resíduos industriais",
+
+  // Saneamento básico
+  "17 – 4": "Saneamento básico",
+  "18 – 74": "Saneamento básico",
+  "21 – 33": "Saneamento básico",
+  "22 – 2": "Saneamento básico",
+  "22 – 3": "Saneamento básico",
+  "22 – 8": "Saneamento básico",
+
+  // Selo Ruído
+  "5 – 3": "Selo Ruído",
+  "21 – 42": "Selo Ruído",
+
+  // Serviços de transporte
+  "18 – 1": "Serviços de transporte",
+  "18 – 2": "Serviços de transporte",
+  "18 – 3": "Serviços de transporte",
+  "18 – 4": "Serviços de transporte",
+  "18 – 14": "Serviços de transporte",
+  "18 – 74": "Serviços de transporte",
+  "21 – 49": "Serviços de transporte",
+
+  // Turismo
+  "19 – 1": "Turismo",
+
+  // Veículo automotor (Proconve/Promot)
+  "4 – 1": "Veículo automotor (Proconve/Promot)",
+  "6 – 1": "Veículo automotor (Proconve/Promot)",
+  "21 – 43": "Veículo automotor (Proconve/Promot)",
+  "21 – 44": "Veículo automotor (Proconve/Promot)",
+};
+
+// Get unique categories for filter dropdown
+const getUniqueCategories = () => {
+  const categories = new Set(Object.values(FTE_CODE_CATEGORIES));
+  return Array.from(categories).sort();
+};
+
 function App() {
+  // Function to get FTE title from code
+  const getFteTitle = (codigo) => {
+    return FTE_CODE_TITLES[codigo] || "Título não disponível";
+  };
+
+  // Function to get FTE category from code
+  const getFteCategory = (codigo) => {
+    return FTE_CODE_CATEGORIES[codigo] || "Sem categoria";
+  };
   const [fteData, setFteData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [fteCodeSearch, setFteCodeSearch] = useState("");
   const [expandedItems, setExpandedItems] = useState({});
   const [filterCnaeType, setFilterCnaeType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
   const [statsDialogOpen, setStatsDialogOpen] = useState(false);
+  const [viewMode, setViewMode] = useState("list"); // "list" or "list" or "grouped"
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
     fetchFteData();
@@ -76,6 +685,60 @@ function App() {
       setError(err.message);
       setLoading(false);
     }
+  };
+
+  // Function to transform FTE code format from "18 – 4" to "18.4"
+  const transformFteCode = (codigo) => {
+    if (!codigo || codigo === "N/A") return "N/A";
+    // Replace " – " with "." for better searchability
+    return codigo.replace(/ – /g, ".");
+  };
+
+  // Function to group FTE data by código and organize by versions
+  const groupFteByCodigo = (data) => {
+    const grouped = {};
+
+    data.forEach((item) => {
+      const codigo = item.data?.metadata?.["Código:"] || "N/A";
+      const version = item.data?.metadata?.["Versão FTE:"] || "N/A";
+
+      if (!grouped[codigo]) {
+        grouped[codigo] = {
+          codigo,
+          codigoDisplay: transformFteCode(codigo), // Add transformed display format
+          versions: [],
+          latestVersion: null,
+        };
+      }
+
+      // Parse version number for comparison
+      const versionNum = parseFloat(version.replace(/[^\d.]/g, ""));
+
+      grouped[codigo].versions.push({
+        ...item,
+        version,
+        versionNum,
+      });
+
+      // Update latest version
+      if (
+        !grouped[codigo].latestVersion ||
+        versionNum > grouped[codigo].latestVersion.versionNum
+      ) {
+        grouped[codigo].latestVersion = {
+          ...item,
+          version,
+          versionNum,
+        };
+      }
+    });
+
+    // Sort versions within each group
+    Object.values(grouped).forEach((group) => {
+      group.versions.sort((a, b) => b.versionNum - a.versionNum);
+    });
+
+    return grouped;
   };
 
   const handleExpand = (index) => {
@@ -99,12 +762,19 @@ function App() {
 
   const clearFilters = () => {
     setSearchTerm("");
+    setFteCodeSearch("");
     setFilterCnaeType("all");
     setFilterCategory("all");
+    setCategoryFilter("");
   };
 
   const filteredData = fteData.filter((item) => {
-    if (!searchTerm && filterCnaeType === "all" && filterCategory === "all")
+    if (
+      !searchTerm &&
+      !fteCodeSearch &&
+      filterCnaeType === "all" &&
+      filterCategory === "all"
+    )
       return true;
 
     const searchLower = searchTerm.toLowerCase();
@@ -117,8 +787,10 @@ function App() {
 
     // Search filter
     if (searchTerm) {
+      const fteTitle = getFteTitle(metadata["Código:"] || "");
       const hasSearchMatch =
         url.includes(searchLower) ||
+        fteTitle.toLowerCase().includes(searchLower) ||
         Object.values(metadata).some((value) =>
           value?.toLowerCase().includes(searchLower)
         ) ||
@@ -134,6 +806,29 @@ function App() {
         );
 
       if (!hasSearchMatch) return false;
+    }
+
+    // FTE Code filter
+    if (fteCodeSearch) {
+      const fteCode = metadata["Código:"] || "";
+      const fteCodeTransformed = transformFteCode(fteCode);
+      const searchLower = fteCodeSearch.toLowerCase();
+
+      // Check both original format and transformed format
+      if (
+        !fteCode.toLowerCase().includes(searchLower) &&
+        !fteCodeTransformed.toLowerCase().includes(searchLower)
+      ) {
+        return false;
+      }
+    }
+
+    // Category filter
+    if (categoryFilter) {
+      const fteCategory = getFteCategory(metadata["Código:"] || "");
+      if (fteCategory !== categoryFilter) {
+        return false;
+      }
     }
 
     // CNAE type filter
@@ -161,8 +856,20 @@ function App() {
     return true;
   });
 
+  // Get grouped data for filtered results
+  const groupedFilteredData = groupFteByCodigo(filteredData);
+
   const getStatistics = () => {
-    const totalFtes = fteData.length;
+    // Get unique FTE codes
+    const uniqueCodes = new Set();
+    fteData.forEach((item) => {
+      const codigo = item.data?.metadata?.["Código:"] || "N/A";
+      if (codigo !== "N/A") {
+        uniqueCodes.add(codigo);
+      }
+    });
+
+    const totalUniqueCodes = uniqueCodes.size;
     const totalCnaeEntries = fteData.reduce((sum, item) => {
       const cnae =
         item.data?.["Classificação Nacional de Atividades Econômicas"] || [];
@@ -171,6 +878,7 @@ function App() {
 
     const cnaeTypeCounts = {};
     const categoryCounts = {};
+    const environmentalThemeCounts = {};
 
     fteData.forEach((item) => {
       const cnae =
@@ -182,6 +890,7 @@ function App() {
         cnaeTypeCounts[type] = (cnaeTypeCounts[type] || 0) + 1;
       });
 
+      // Count by traditional categories
       if (code.includes("1"))
         categoryCounts["Mining"] = (categoryCounts["Mining"] || 0) + 1;
       if (code.includes("15"))
@@ -203,13 +912,21 @@ function App() {
       if (code.includes("21"))
         categoryCounts["Environmental Control"] =
           (categoryCounts["Environmental Control"] || 0) + 1;
+
+      // Count by environmental themes
+      const theme = getFteCategory(code);
+      if (theme !== "Sem categoria") {
+        environmentalThemeCounts[theme] =
+          (environmentalThemeCounts[theme] || 0) + 1;
+      }
     });
 
     return {
-      totalFtes,
+      totalUniqueCodes,
       totalCnaeEntries,
       cnaeTypeCounts,
       categoryCounts,
+      environmentalThemeCounts,
     };
   };
 
@@ -218,7 +935,7 @@ function App() {
     let csvContent = "data:text/csv;charset=utf-8,";
 
     csvContent += "FTE Statistics\n";
-    csvContent += `Total FTEs,${stats.totalFtes}\n`;
+    csvContent += `Total Unique FTE Codes,${stats.totalUniqueCodes}\n`;
     csvContent += `Total CNAE Entries,${stats.totalCnaeEntries}\n\n`;
 
     csvContent += "CNAE Type Distribution\n";
@@ -233,6 +950,12 @@ function App() {
       csvContent += `${category},${count}\n`;
     });
 
+    csvContent += "\nEnvironmental Theme Distribution\n";
+    csvContent += "Theme,Count\n";
+    Object.entries(stats.environmentalThemeCounts).forEach(([theme, count]) => {
+      csvContent += `${theme},${count}\n`;
+    });
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -241,6 +964,350 @@ function App() {
     link.click();
     document.body.removeChild(link);
   };
+
+  // Render FTE content for both views
+  const renderFteContent = (item, isGrouped = false) => (
+    <Box sx={{ mt: 2 }}>
+      <Divider sx={{ mb: 2 }} />
+
+      {/* Metadata Section */}
+      {item.data?.metadata && Object.keys(item.data.metadata).length > 0 && (
+        <Box sx={{ mb: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <DescriptionIcon sx={{ mr: 1 }} />
+              Metadados
+            </Typography>
+            <Button
+              variant="text"
+              size="small"
+              startIcon={<OpenInNewIcon />}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                fontSize: "0.75rem",
+                color: "primary.main",
+              }}
+            >
+              Ver Fonte
+            </Button>
+          </Box>
+          <Grid container spacing={2}>
+            {Object.entries(item.data.metadata).map(([key, value]) => (
+              <Grid item xs={12} sm={6} md={4} key={key}>
+                <Paper variant="outlined" sx={{ p: 2 }}>
+                  <Typography variant="subtitle2" color="primary" gutterBottom>
+                    {key}
+                  </Typography>
+                  <Typography variant="body2">{value || "N/A"}</Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      )}
+
+      {/* Sections */}
+      {item.data?.sections && item.data.sections.length > 0 && (
+        <Box sx={{ mb: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <CategoryIcon sx={{ mr: 1 }} />
+              Seções ({item.data.sections.length})
+            </Typography>
+            <Button
+              variant="text"
+              size="small"
+              startIcon={<OpenInNewIcon />}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                fontSize: "0.75rem",
+                color: "primary.main",
+              }}
+            >
+              Ver Fonte
+            </Button>
+          </Box>
+          <Grid container spacing={2}>
+            {item.data.sections.map((section, sectionIndex) => (
+              <Grid item xs={12} sm={6} md={4} key={sectionIndex}>
+                <Paper variant="outlined" sx={{ p: 2 }}>
+                  <Typography variant="subtitle2" color="primary" gutterBottom>
+                    {section.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
+                    {section.content || "N/A"}
+                  </Typography>
+                  {section.items && section.items.length > 0 && (
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        Itens:
+                      </Typography>
+                      {section.items.map((item, itemIndex) => (
+                        <Chip
+                          key={itemIndex}
+                          label={item}
+                          size="small"
+                          sx={{ mr: 0.5, mb: 0.5 }}
+                        />
+                      ))}
+                    </Box>
+                  )}
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      )}
+
+      {/* CNAE Section */}
+      {item.data?.["Classificação Nacional de Atividades Econômicas"] &&
+        item.data["Classificação Nacional de Atividades Econômicas"].length >
+          0 && (
+          <Box sx={{ mb: 3 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 2,
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                <CategoryIcon sx={{ mr: 1 }} />
+                Classificação Nacional de Atividades Econômicas (
+                {
+                  item.data["Classificação Nacional de Atividades Econômicas"]
+                    .length
+                }
+                )
+              </Typography>
+              <Button
+                variant="text"
+                size="small"
+                startIcon={<OpenInNewIcon />}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  fontSize: "0.75rem",
+                  color: "primary.main",
+                }}
+              >
+                Ver Fonte
+              </Button>
+            </Box>
+            <TableContainer component={Paper} variant="outlined">
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      <strong>Agrupamento</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>Código</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>Descrição</strong>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {item.data[
+                    "Classificação Nacional de Atividades Econômicas"
+                  ].map((cnae, cnaeIndex) => (
+                    <TableRow key={cnaeIndex}>
+                      <TableCell>
+                        <Chip
+                          label={cnae.agrupamento || "N/A"}
+                          size="small"
+                          color={
+                            cnae.agrupamento === "descritor"
+                              ? "primary"
+                              : "secondary"
+                          }
+                          variant="outlined"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={cnae.código || "N/A"}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2" sx={{ fontSize: "0.9rem" }}>
+                          {cnae.descricao || "N/A"}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        )}
+
+      {/* Referências Normativas Section with Numbered Items */}
+      {item.data?.unknown_section && item.data.unknown_section.length > 0 && (
+        <Box sx={{ mb: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <CategoryIcon sx={{ mr: 1 }} />
+              Referências Normativas ({item.data.unknown_section.length})
+            </Typography>
+            <Button
+              variant="text"
+              size="small"
+              startIcon={<OpenInNewIcon />}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                fontSize: "0.75rem",
+                color: "primary.main",
+              }}
+            >
+              Ver Fonte
+            </Button>
+          </Box>
+          <Paper variant="outlined" sx={{ p: 2 }}>
+            <Grid container spacing={1}>
+              {item.data.unknown_section.map((item_text, itemIndex) => (
+                <Grid item xs={12} key={itemIndex}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 1,
+                    }}
+                  >
+                    <Chip
+                      label={itemIndex + 1}
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                      sx={{
+                        minWidth: "32px",
+                        justifyContent: "center",
+                      }}
+                    />
+                    <Typography variant="body2" sx={{ flex: 1, pt: 0.5 }}>
+                      {item_text}
+                    </Typography>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Paper>
+        </Box>
+      )}
+
+      {/* Raw Content Section */}
+      {item.data?.raw_content && (
+        <Box sx={{ mb: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <DescriptionIcon sx={{ mr: 1 }} />
+              Conteúdo Bruto (Raw Content)
+            </Typography>
+            <Button
+              variant="text"
+              size="small"
+              startIcon={<OpenInNewIcon />}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                fontSize: "0.75rem",
+                color: "primary.main",
+              }}
+            >
+              Ver Fonte Original
+            </Button>
+          </Box>
+          <Paper
+            variant="outlined"
+            sx={{
+              p: 2,
+              bgcolor: "#f8f9fa",
+              maxHeight: "400px",
+              overflow: "auto",
+              fontFamily: "monospace",
+              fontSize: "0.8rem",
+              lineHeight: 1.4,
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+              border: "1px solid #e0e0e0",
+            }}
+          >
+            <Typography
+              component="pre"
+              variant="body2"
+              sx={{
+                margin: 0,
+                fontFamily: "inherit",
+                fontSize: "inherit",
+                lineHeight: "inherit",
+                whiteSpace: "inherit",
+                wordBreak: "inherit",
+              }}
+            >
+              {item.data.raw_content}
+            </Typography>
+          </Paper>
+        </Box>
+      )}
+    </Box>
+  );
 
   if (loading) {
     return (
@@ -306,9 +1373,11 @@ function App() {
             >
               <CardContent>
                 <Typography variant="h4" component="div">
-                  {stats.totalFtes}
+                  {stats.totalUniqueCodes}
                 </Typography>
-                <Typography variant="body2">Total de FTEs</Typography>
+                <Typography variant="body2">
+                  Total de Códigos FTE Únicos
+                </Typography>
               </CardContent>
             </Card>
           </Grid>
@@ -365,17 +1434,33 @@ function App() {
         {/* Search and Filters */}
         <Box sx={{ mb: 3 }}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={3}>
               <TextField
                 fullWidth
                 variant="outlined"
-                placeholder="Pesquisar por código, descrição, CNAE, etc..."
+                placeholder="Pesquisar por código, título, descrição, CNAE, etc..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Buscar por código FTE (ex: 1.1, 15.1, 18.4)"
+                value={fteCodeSearch}
+                onChange={(e) => setFteCodeSearch(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CodeIcon />
                     </InputAdornment>
                   ),
                 }}
@@ -418,7 +1503,39 @@ function App() {
               </FormControl>
             </Grid>
             <Grid item xs={12} md={2}>
-              <Stack direction="row" spacing={1}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Tema Ambiental</InputLabel>
+                <Select
+                  value={categoryFilter}
+                  label="Tema Ambiental"
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                >
+                  <MenuItem value="">Todos os temas</MenuItem>
+                  {getUniqueCategories().map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <ToggleButtonGroup
+                  value={viewMode}
+                  exclusive
+                  onChange={(e, newMode) => newMode && setViewMode(newMode)}
+                  size="small"
+                >
+                  <ToggleButton value="list" aria-label="list view">
+                    <ViewListIcon sx={{ mr: 1 }} />
+                    Lista
+                  </ToggleButton>
+                  <ToggleButton value="grouped" aria-label="grouped view">
+                    <GroupIcon sx={{ mr: 1 }} />
+                    Agrupado
+                  </ToggleButton>
+                </ToggleButtonGroup>
                 <Button
                   variant="outlined"
                   size="small"
@@ -451,7 +1568,16 @@ function App() {
             }}
           >
             <Typography variant="body2" color="text.secondary">
-              Total de FTEs encontradas: {filteredData.length}
+              {viewMode === "list"
+                ? `Total de FTEs encontradas: ${filteredData.length}`
+                : `Total de códigos FTE únicos: ${
+                    Object.keys(groupedFilteredData).length
+                  }`}
+              {searchTerm && ` | Pesquisa: "${searchTerm}"`}
+              {fteCodeSearch && ` | Código FTE: "${fteCodeSearch}"`}
+              {filterCnaeType !== "all" && ` | Tipo CNAE: ${filterCnaeType}`}
+              {filterCategory !== "all" && ` | Categoria: ${filterCategory}`}
+              {categoryFilter && ` | Tema: ${categoryFilter}`}
             </Typography>
             <Stack direction="row" spacing={1}>
               <Button variant="outlined" size="small" onClick={handleExpandAll}>
@@ -477,8 +1603,10 @@ function App() {
           </Box>
 
           {searchTerm ||
+          fteCodeSearch ||
           filterCnaeType !== "all" ||
-          filterCategory !== "all" ? (
+          filterCategory !== "all" ||
+          categoryFilter ? (
             <LinearProgress
               variant="determinate"
               value={(filteredData.length / fteData.length) * 100}
@@ -488,478 +1616,268 @@ function App() {
         </Box>
       </Box>
 
-      {/* FTE Cards */}
-      <Grid container spacing={3}>
-        {filteredData.map((item, index) => (
-          <Grid item xs={12} key={index}>
-            <Card>
-              <CardContent>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    mb: 2,
-                  }}
-                >
-                  <Box>
-                    <Typography variant="h6" component="h3" gutterBottom>
-                      <CodeIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-                      FTE {item.data?.metadata?.["Código:"] || "N/A"}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      Versão: {item.data?.metadata?.["Versão FTE:"] || "N/A"}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ wordBreak: "break-all", fontSize: "0.8rem" }}
-                    >
-                      <Link
+      {/* FTE Cards - List View */}
+      {viewMode === "list" && (
+        <Grid container spacing={3}>
+          {filteredData.map((item, index) => (
+            <Grid item xs={12} key={index}>
+              <Card>
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      mb: 2,
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="h6" component="h3" gutterBottom>
+                        <CodeIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+                        FTE{" "}
+                        {transformFteCode(
+                          item.data?.metadata?.["Código:"] || "N/A"
+                        )}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        color="primary"
+                        sx={{ mb: 1, fontStyle: "italic" }}
+                      >
+                        {getFteTitle(item.data?.metadata?.["Código:"] || "N/A")}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 1 }}
+                      >
+                        <Chip
+                          label={getFteCategory(
+                            item.data?.metadata?.["Código:"] || "N/A"
+                          )}
+                          size="small"
+                          color="secondary"
+                          variant="outlined"
+                        />
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 1 }}
+                      >
+                        Versão: {item.data?.metadata?.["Versão FTE:"] || "N/A"}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ wordBreak: "break-all", fontSize: "0.8rem" }}
+                      >
+                        <Link
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{
+                            color: "primary.main",
+                            textDecoration: "none",
+                            "&:hover": {
+                              textDecoration: "underline",
+                              color: "primary.dark",
+                            },
+                          }}
+                        >
+                          {item.url}
+                        </Link>
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        startIcon={<OpenInNewIcon />}
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         sx={{
-                          color: "primary.main",
-                          textDecoration: "none",
-                          "&:hover": {
-                            textDecoration: "underline",
-                            color: "primary.dark",
-                          },
+                          mt: 1,
+                          fontSize: "0.75rem",
+                          py: 0.5,
+                          px: 1.5,
                         }}
                       >
-                        {item.url}
-                      </Link>
-                    </Typography>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      startIcon={<OpenInNewIcon />}
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{
-                        mt: 1,
-                        fontSize: "0.75rem",
-                        py: 0.5,
-                        px: 1.5,
-                      }}
-                    >
-                      Abrir Página Original
-                    </Button>
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {item.data?.[
-                      "Classificação Nacional de Atividades Econômicas"
-                    ]?.length > 0 && (
-                      <Tooltip title="Entradas CNAE">
-                        <Badge
-                          badgeContent={
-                            item.data[
-                              "Classificação Nacional de Atividades Econômicas"
-                            ].length
-                          }
-                          color="primary"
-                        >
-                          <BusinessIcon color="action" />
-                        </Badge>
-                      </Tooltip>
-                    )}
-                    <IconButton
-                      onClick={() => handleExpand(index)}
-                      sx={{
-                        transform: expandedItems[index]
-                          ? "rotate(180deg)"
-                          : "rotate(0deg)",
-                        transition: "transform 0.2s",
-                      }}
-                    >
-                      <ExpandMoreIcon />
-                    </IconButton>
-                  </Box>
-                </Box>
-
-                {expandedItems[index] && (
-                  <Box sx={{ mt: 2 }}>
-                    <Divider sx={{ mb: 2 }} />
-
-                    {/* Metadata Section */}
-                    {item.data?.metadata &&
-                      Object.keys(item.data.metadata).length > 0 && (
-                        <Box sx={{ mb: 3 }}>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              mb: 2,
-                            }}
-                          >
-                            <Typography
-                              variant="h6"
-                              sx={{ display: "flex", alignItems: "center" }}
-                            >
-                              <DescriptionIcon sx={{ mr: 1 }} />
-                              Metadados
-                            </Typography>
-                            <Button
-                              variant="text"
-                              size="small"
-                              startIcon={<OpenInNewIcon />}
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              sx={{
-                                fontSize: "0.75rem",
-                                color: "primary.main",
-                              }}
-                            >
-                              Ver Fonte
-                            </Button>
-                          </Box>
-                          <Grid container spacing={2}>
-                            {Object.entries(item.data.metadata).map(
-                              ([key, value]) => (
-                                <Grid item xs={12} sm={6} md={4} key={key}>
-                                  <Paper variant="outlined" sx={{ p: 2 }}>
-                                    <Typography
-                                      variant="subtitle2"
-                                      color="primary"
-                                      gutterBottom
-                                    >
-                                      {key}
-                                    </Typography>
-                                    <Typography variant="body2">
-                                      {value || "N/A"}
-                                    </Typography>
-                                  </Paper>
-                                </Grid>
-                              )
-                            )}
-                          </Grid>
-                        </Box>
-                      )}
-
-                    {/* Sections */}
-                    {item.data?.sections && item.data.sections.length > 0 && (
-                      <Box sx={{ mb: 3 }}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            mb: 2,
-                          }}
-                        >
-                          <Typography
-                            variant="h6"
-                            sx={{ display: "flex", alignItems: "center" }}
-                          >
-                            <CategoryIcon sx={{ mr: 1 }} />
-                            Seções ({item.data.sections.length})
-                          </Typography>
-                          <Button
-                            variant="text"
-                            size="small"
-                            startIcon={<OpenInNewIcon />}
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            sx={{
-                              fontSize: "0.75rem",
-                              color: "primary.main",
-                            }}
-                          >
-                            Ver Fonte
-                          </Button>
-                        </Box>
-                        <Grid container spacing={2}>
-                          {item.data.sections.map((section, sectionIndex) => (
-                            <Grid item xs={12} sm={6} md={4} key={sectionIndex}>
-                              <Paper variant="outlined" sx={{ p: 2 }}>
-                                <Typography
-                                  variant="subtitle2"
-                                  color="primary"
-                                  gutterBottom
-                                >
-                                  {section.title}
-                                </Typography>
-                                <Typography variant="body2" sx={{ mb: 1 }}>
-                                  {section.content || "N/A"}
-                                </Typography>
-                                {section.items && section.items.length > 0 && (
-                                  <Box>
-                                    <Typography
-                                      variant="caption"
-                                      color="text.secondary"
-                                    >
-                                      Itens:
-                                    </Typography>
-                                    {section.items.map((item, itemIndex) => (
-                                      <Chip
-                                        key={itemIndex}
-                                        label={item}
-                                        size="small"
-                                        sx={{ mr: 0.5, mb: 0.5 }}
-                                      />
-                                    ))}
-                                  </Box>
-                                )}
-                              </Paper>
-                            </Grid>
-                          ))}
-                        </Grid>
-                      </Box>
-                    )}
-
-                    {/* CNAE Section */}
-                    {item.data?.[
-                      "Classificação Nacional de Atividades Econômicas"
-                    ] &&
-                      item.data[
+                        Abrir Página Original
+                      </Button>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      {item.data?.[
                         "Classificação Nacional de Atividades Econômicas"
-                      ].length > 0 && (
-                        <Box sx={{ mb: 3 }}>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              mb: 2,
-                            }}
+                      ]?.length > 0 && (
+                        <Tooltip title="Entradas CNAE">
+                          <Badge
+                            badgeContent={
+                              item.data[
+                                "Classificação Nacional de Atividades Econômicas"
+                              ].length
+                            }
+                            color="primary"
                           >
-                            <Typography
-                              variant="h6"
-                              sx={{ display: "flex", alignItems: "center" }}
-                            >
-                              <CategoryIcon sx={{ mr: 1 }} />
-                              Classificação Nacional de Atividades Econômicas (
-                              {
-                                item.data[
-                                  "Classificação Nacional de Atividades Econômicas"
-                                ].length
-                              }
-                              )
-                            </Typography>
-                            <Button
-                              variant="text"
-                              size="small"
-                              startIcon={<OpenInNewIcon />}
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              sx={{
-                                fontSize: "0.75rem",
-                                color: "primary.main",
-                              }}
-                            >
-                              Ver Fonte
-                            </Button>
-                          </Box>
-                          <TableContainer component={Paper} variant="outlined">
-                            <Table size="small">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell>
-                                    <strong>Agrupamento</strong>
-                                  </TableCell>
-                                  <TableCell>
-                                    <strong>Código</strong>
-                                  </TableCell>
-                                  <TableCell>
-                                    <strong>Descrição</strong>
-                                  </TableCell>
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                {item.data[
-                                  "Classificação Nacional de Atividades Econômicas"
-                                ].map((cnae, cnaeIndex) => (
-                                  <TableRow key={cnaeIndex}>
-                                    <TableCell>
-                                      <Chip
-                                        label={cnae.agrupamento || "N/A"}
-                                        size="small"
-                                        color={
-                                          cnae.agrupamento === "descritor"
-                                            ? "primary"
-                                            : "secondary"
-                                        }
-                                        variant="outlined"
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Chip
-                                        label={cnae.código || "N/A"}
-                                        size="small"
-                                        color="primary"
-                                        variant="outlined"
-                                      />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Typography
-                                        variant="body2"
-                                        sx={{ fontSize: "0.9rem" }}
-                                      >
-                                        {cnae.descricao || "N/A"}
-                                      </Typography>
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Box>
+                            <BusinessIcon color="action" />
+                          </Badge>
+                        </Tooltip>
                       )}
+                      <IconButton
+                        onClick={() => handleExpand(index)}
+                        sx={{
+                          transform: expandedItems[index]
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                          transition: "transform 0.2s",
+                        }}
+                      >
+                        <ExpandMoreIcon />
+                      </IconButton>
+                    </Box>
+                  </Box>
 
-                    {/* Referências Normativas Section with Numbered Items */}
-                    {item.data?.unknown_section &&
-                      item.data.unknown_section.length > 0 && (
-                        <Box sx={{ mb: 3 }}>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              mb: 2,
-                            }}
+                  {expandedItems[index] && renderFteContent(item)}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {/* FTE Cards - Grouped View */}
+      {viewMode === "grouped" && (
+        <Grid container spacing={3}>
+          {Object.entries(groupedFilteredData).map(([codigo, group]) => (
+            <Grid item xs={12} key={codigo}>
+              <Card>
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      mb: 2,
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="h5" component="h3" gutterBottom>
+                        <CodeIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+                        FTE - {group.codigoDisplay}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        color="primary"
+                        sx={{ mb: 1, fontStyle: "italic" }}
+                      >
+                        {getFteTitle(codigo)}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 1 }}
+                      >
+                        <Chip
+                          label={getFteCategory(codigo)}
+                          size="small"
+                          color="secondary"
+                          variant="outlined"
+                        />
+                      </Typography>
+                      <Typography variant="h6" color="primary" sx={{ mb: 1 }}>
+                        Versão: {group.latestVersion.version} (mais recente)
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 1 }}
+                      >
+                        Total de versões: {group.versions.length}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      {group.latestVersion.data?.[
+                        "Classificação Nacional de Atividades Econômicas"
+                      ]?.length > 0 && (
+                        <Tooltip title="Entradas CNAE">
+                          <Badge
+                            badgeContent={
+                              group.latestVersion.data[
+                                "Classificação Nacional de Atividades Econômicas"
+                              ].length
+                            }
+                            color="primary"
                           >
-                            <Typography
-                              variant="h6"
-                              sx={{ display: "flex", alignItems: "center" }}
-                            >
-                              <CategoryIcon sx={{ mr: 1 }} />
-                              Referências Normativas (
-                              {item.data.unknown_section.length})
-                            </Typography>
-                            <Button
-                              variant="text"
-                              size="small"
-                              startIcon={<OpenInNewIcon />}
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              sx={{
-                                fontSize: "0.75rem",
-                                color: "primary.main",
-                              }}
-                            >
-                              Ver Fonte
-                            </Button>
-                          </Box>
-                          <Paper variant="outlined" sx={{ p: 2 }}>
-                            <Grid container spacing={1}>
-                              {item.data.unknown_section.map(
-                                (item_text, itemIndex) => (
-                                  <Grid item xs={12} key={itemIndex}>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        gap: 1,
-                                      }}
-                                    >
-                                      <Chip
-                                        label={itemIndex + 1}
-                                        size="small"
-                                        color="primary"
-                                        variant="outlined"
-                                        sx={{
-                                          minWidth: "32px",
-                                          justifyContent: "center",
-                                        }}
-                                      />
-                                      <Typography
-                                        variant="body2"
-                                        sx={{ flex: 1, pt: 0.5 }}
-                                      >
-                                        {item_text}
-                                      </Typography>
-                                    </Box>
-                                  </Grid>
-                                )
-                              )}
-                            </Grid>
-                          </Paper>
-                        </Box>
+                            <BusinessIcon color="action" />
+                          </Badge>
+                        </Tooltip>
                       )}
+                      <IconButton
+                        onClick={() => handleExpand(codigo)}
+                        sx={{
+                          transform: expandedItems[codigo]
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                          transition: "transform 0.2s",
+                        }}
+                      >
+                        <ExpandMoreIcon />
+                      </IconButton>
+                    </Box>
+                  </Box>
 
-                    {/* Raw Content Section */}
-                    {item.data?.raw_content && (
-                      <Box sx={{ mb: 3 }}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            mb: 2,
-                          }}
+                  {expandedItems[codigo] && (
+                    <Box>
+                      {/* Latest Version Content */}
+                      <Box sx={{ mb: 4 }}>
+                        <Typography
+                          variant="h6"
+                          color="success.main"
+                          gutterBottom
                         >
+                          Versão Atual: {group.latestVersion.version}
+                        </Typography>
+                        {renderFteContent(group.latestVersion, true)}
+                      </Box>
+
+                      {/* Previous Versions */}
+                      {group.versions.length > 1 && (
+                        <Box sx={{ mb: 3 }}>
                           <Typography
                             variant="h6"
-                            sx={{ display: "flex", alignItems: "center" }}
+                            color="text.secondary"
+                            gutterBottom
                           >
-                            <DescriptionIcon sx={{ mr: 1 }} />
-                            Conteúdo Bruto (Raw Content)
+                            Versões Anteriores
                           </Typography>
-                          <Button
-                            variant="text"
-                            size="small"
-                            startIcon={<OpenInNewIcon />}
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            sx={{
-                              fontSize: "0.75rem",
-                              color: "primary.main",
-                            }}
-                          >
-                            Ver Fonte Original
-                          </Button>
+                          {group.versions.slice(1).map((version, index) => (
+                            <Box
+                              key={index}
+                              sx={{
+                                mb: 3,
+                                pl: 3,
+                                borderLeft: "2px solid #e0e0e0",
+                              }}
+                            >
+                              <Typography
+                                variant="h6"
+                                color="text.secondary"
+                                gutterBottom
+                              >
+                                Versão: {version.version}
+                              </Typography>
+                              {renderFteContent(version, true)}
+                            </Box>
+                          ))}
                         </Box>
-                        <Paper
-                          variant="outlined"
-                          sx={{
-                            p: 2,
-                            bgcolor: "#f8f9fa",
-                            maxHeight: "400px",
-                            overflow: "auto",
-                            fontFamily: "monospace",
-                            fontSize: "0.8rem",
-                            lineHeight: 1.4,
-                            whiteSpace: "pre-wrap",
-                            wordBreak: "break-word",
-                            border: "1px solid #e0e0e0",
-                          }}
-                        >
-                          <Typography
-                            component="pre"
-                            variant="body2"
-                            sx={{
-                              margin: 0,
-                              fontFamily: "inherit",
-                              fontSize: "inherit",
-                              lineHeight: "inherit",
-                              whiteSpace: "inherit",
-                              wordBreak: "inherit",
-                            }}
-                          >
-                            {item.data.raw_content}
-                          </Typography>
-                        </Paper>
-                      </Box>
-                    )}
-                  </Box>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                      )}
+                    </Box>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       {/* Statistics Dialog */}
       <Dialog
