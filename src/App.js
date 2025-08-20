@@ -327,323 +327,149 @@ const FTE_CODE_TITLES = {
 
 // FTE Code to Category mapping
 const FTE_CODE_CATEGORIES = {
-  // Abastecimento de combustíveis
-  "18 – 5": "Abastecimento de combustíveis",
-  "18 – 6": "Abastecimento de combustíveis",
-
-  // Agrotóxicos
-  "15 – 11": "Agrotóxicos",
-  "17 – 61": "Agrotóxicos",
-  "18 – 66": "Agrotóxicos",
-  "18 – 80": "Agrotóxicos",
-  "21 – 5": "Agrotóxicos",
-  "21 – 47": "Agrotóxicos",
-  "21 – 66": "Agrotóxicos",
-
-  // Biotecnologia
-  "20 – 5": "Biotecnologia",
-  "20 – 35": "Biotecnologia",
-  "20 – 37": "Biotecnologia",
-  "21 – 51": "Biotecnologia",
-  "21 – 66": "Biotecnologia",
-
-  // Criação amadorista de passeriformes
-  "21 – 60": "Criação amadorista de passeriformes",
-
-  // Convenção de Basileia
-  "18 – 79": "Convenção de Basileia",
-  "21 – 40": "Convenção de Basileia",
-
-  // Energia Elétrica
-  "17 – 1": "Energia Elétrica",
-  "21 – 34": "Energia Elétrica",
-  "21 – 35": "Energia Elétrica",
-  "21 – 36": "Energia Elétrica",
-  "21 – 37": "Energia Elétrica",
-  "21 – 46": "Energia Elétrica",
-  "22 – 2": "Energia Elétrica",
-  "22 – 8": "Energia Elétrica",
-
-  // Empreendimentos - Instalação
-  "21 – 75": "Empreendimentos - Instalação",
-  "22 – 1": "Empreendimentos - Instalação",
-  "22 – 2": "Empreendimentos - Instalação",
-  "22 – 3": "Empreendimentos - Instalação",
-  "22 – 4": "Empreendimentos - Instalação",
-  "22 – 5": "Empreendimentos - Instalação",
-  "22 – 6": "Empreendimentos - Instalação",
-  "22 – 7": "Empreendimentos - Instalação",
-  "22 – 8": "Empreendimentos - Instalação",
-
-  // Fauna
-  "10 – 1": "Fauna",
-  "10 – 2": "Fauna",
-  "16 – 15": "Fauna",
-  "20 – 5": "Fauna",
-  "20 – 21": "Fauna",
-  "20 – 23": "Fauna",
-  "20 – 25": "Fauna",
-  "20 – 81": "Fauna",
-  "21 – 52": "Fauna",
-  "21 – 53": "Fauna",
-  "21 – 55": "Fauna",
-  "21 – 56": "Fauna",
-  "21 – 60": "Fauna",
-  "21 – 71": "Fauna",
-  "21 – 72": "Fauna",
-
-  // Fauna doméstica
-  "10 – 1": "Fauna doméstica",
-  "10 – 2": "Fauna doméstica",
-  "16 – 2": "Fauna doméstica",
-  "21 – 74": "Fauna doméstica",
-
-  // Fauna sinantrópica
-  "21 – 59": "Fauna sinantrópica",
-
-  // Fauna invasora
-  "20 – 26": "Fauna invasora",
-  "21 – 58": "Fauna invasora",
-
-  // Fauna - Recursos pesqueiros
-  "16 – 4": "Fauna - Recursos pesqueiros",
-  "20 – 5": "Fauna - Recursos pesqueiros",
-  "20 – 6": "Fauna - Recursos pesqueiros",
-  "20 – 54": "Fauna - Recursos pesqueiros",
-  "21 – 69": "Fauna - Recursos pesqueiros",
-  "21 – 70": "Fauna - Recursos pesqueiros",
-
-  // Flora e madeira
-  "7 – 1": "Flora e madeira",
-  "7 – 2": "Flora e madeira",
-  "7 – 3": "Flora e madeira",
-  "7 – 4": "Flora e madeira",
-  "15 – 2": "Flora e madeira",
-  "15 – 4": "Flora e madeira",
-  "20 – 2": "Flora e madeira",
-  "20 – 5": "Flora e madeira",
-  "20 – 22": "Flora e madeira",
-  "20 – 26": "Flora e madeira",
-  "20 – 63": "Flora e madeira",
-  "21 – 49": "Flora e madeira",
-  "21 – 48": "Flora e madeira",
-  "21 – 64": "Flora e madeira",
-  "21 – 67": "Flora e madeira",
-  "21 – 68": "Flora e madeira",
-  "21 – 92": "Flora e madeira",
-  "21 – 93": "Flora e madeira",
-
-  // Importação / Exportação
-  "18 – 8": "Importação / Exportação",
-  "18 – 10": "Importação / Exportação",
-  "18 – 13": "Importação / Exportação",
-  "18 – 17": "Importação / Exportação",
-  "18 – 66": "Importação / Exportação",
-  "18 – 81": "Importação / Exportação",
-  "20 – 21": "Importação / Exportação",
-  "20 – 22": "Importação / Exportação",
-  "21 – 41": "Importação / Exportação",
-  "21 – 42": "Importação / Exportação",
-  "21 – 43": "Importação / Exportação",
-  "21 – 44": "Importação / Exportação",
-  "21 – 45": "Importação / Exportação",
-  "21 – 57": "Importação / Exportação",
-  "21 – 64": "Importação / Exportação",
-
-  // Logística Reversa
-  "15 – 11": "Logística Reversa",
-  "17 – 61": "Logística Reversa",
-  "18 – 66": "Logística Reversa",
-  "18 – 74": "Logística Reversa",
-  "18 – 80": "Logística Reversa",
-  "20 – 5": "Logística Reversa",
-  "21 – 47": "Logística Reversa",
-  "21 – 66": "Logística Reversa",
-  "5 – 1": "Logística Reversa",
-  "17 – 62": "Logística Reversa",
-  "18 – 81": "Logística Reversa",
-  "9 – 6": "Logística Reversa",
-  "17 – 63": "Logística Reversa",
-  "21 – 45": "Logística Reversa",
-  "15 – 23": "Logística Reversa",
-  "18 – 13": "Logística Reversa",
-  "18 – 14": "Logística Reversa",
-  "5 – 4": "Logística Reversa",
-  "21 – 41": "Logística Reversa",
-
-  // Mercúrio metálico
-  "1 – 7": "Mercúrio metálico",
-  "3 – 12": "Mercúrio metálico",
-  "15 – 20": "Mercúrio metálico",
-  "18 – 8": "Mercúrio metálico",
-
-  // Mineração
-  "1 – 1": "Mineração",
-  "1 – 2": "Mineração",
-  "1 – 3": "Mineração",
-  "1 – 4": "Mineração",
-  "1 – 7": "Mineração",
-  "17 – 58": "Mineração",
-  "17 – 59": "Mineração",
-  "18 – 2": "Mineração",
-  "18 – 4": "Mineração",
-  "22 – 2": "Mineração",
-  "22 – 8": "Mineração",
-
-  // Óleo lubrificante
-  "15 – 2": "Óleo lubrificante",
-  "15 – 23": "Óleo lubrificante",
-  "18 – 13": "Óleo lubrificante",
-  "18 – 14": "Óleo lubrificante",
-  "18 – 80": "Óleo lubrificante",
-
-  // Patrimônio genético
-  "20 – 5": "Patrimônio genético",
-
-  // Pessoas físicas (PFs)
-  "1 – 1": "Pessoas físicas (PFs)",
-  "1 – 2": "Pessoas físicas (PFs)",
-  "1 – 4": "Pessoas físicas (PFs)",
-  "1 – 7": "Pessoas físicas (PFs)",
-  "17 – 1": "Pessoas físicas (PFs)",
-  "17 – 67": "Pessoas físicas (PFs)",
-  "18 – 1": "Pessoas físicas (PFs)",
-  "18 – 83": "Pessoas físicas (PFs)",
-  "20 – 2": "Pessoas físicas (PFs)",
-  "20 – 5": "Pessoas físicas (PFs)",
-  "20 – 6": "Pessoas físicas (PFs)",
-  "20 – 21": "Pessoas físicas (PFs)",
-  "20 – 22": "Pessoas físicas (PFs)",
-  "20 – 23": "Pessoas físicas (PFs)",
-  "20 – 26": "Pessoas físicas (PFs)",
-  "20 – 35": "Pessoas físicas (PFs)",
-  "20 – 54": "Pessoas físicas (PFs)",
-  "20 – 63": "Pessoas físicas (PFs)",
-  "20 – 81": "Pessoas físicas (PFs)",
-  "21 – 27": "Pessoas físicas (PFs)",
-  "21 – 32": "Pessoas físicas (PFs)",
-  "21 – 35": "Pessoas físicas (PFs)",
-  "21 – 36": "Pessoas físicas (PFs)",
-  "21 – 43": "Pessoas físicas (PFs)",
-  "21 – 45": "Pessoas físicas (PFs)",
-  "21 – 46": "Pessoas físicas (PFs)",
-  "21 – 47": "Pessoas físicas (PFs)",
-  "21 – 49": "Pessoas físicas (PFs)",
-  "21 – 53": "Pessoas físicas (PFs)",
-  "21 – 56": "Pessoas físicas (PFs)",
-  "21 – 57": "Pessoas físicas (PFs)",
-  "21 – 58": "Pessoas físicas (PFs)",
-  "21 – 59": "Pessoas físicas (PFs)",
-  "21 – 60": "Pessoas físicas (PFs)",
-  "21 – 62": "Pessoas físicas (PFs)",
-  "21 – 74": "Pessoas físicas (PFs)",
-  "21 – 75": "Pessoas físicas (PFs)",
-  "21 – 92": "Pessoas físicas (PFs)",
-  "21 – 93": "Pessoas físicas (PFs)",
-
-  // Petróleo, gás e derivados
-  "1 – 5": "Petróleo, gás e derivados",
-  "15 – 2": "Petróleo, gás e derivados",
-  "15 – 23": "Petróleo, gás e derivados",
-  "18 – 1": "Petróleo, gás e derivados",
-  "18 – 2": "Petróleo, gás e derivados",
-  "18 – 4": "Petróleo, gás e derivados",
-  "18 – 5": "Petróleo, gás e derivados",
-  "18 – 6": "Petróleo, gás e derivados",
-  "18 – 13": "Petróleo, gás e derivados",
-  "18 – 14": "Petróleo, gás e derivados",
-  "18 – 74": "Petróleo, gás e derivados",
-  "18 – 80": "Petróleo, gás e derivados",
-  "22 – 8": "Petróleo, gás e derivados",
-
-  // Pilhas e baterias
-  "5 – 1": "Pilhas e baterias",
-  "17 – 62": "Pilhas e baterias",
-  "18 – 81": "Pilhas e baterias",
-
-  // Pneus
-  "9 – 6": "Pneus",
-  "9 – 7": "Pneus",
-  "17 – 63": "Pneus",
-  "21 – 45": "Pneus",
-
-  // Preservativo de madeira
-  "7 – 2": "Preservativo de madeira",
-  "15 – 17": "Preservativo de madeira",
-  "18 – 17": "Preservativo de madeira",
-
-  // Protocolo de Montreal
-  "17 – 66": "Protocolo de Montreal",
-  "18 – 1": "Protocolo de Montreal",
-  "18 – 10": "Protocolo de Montreal",
-  "21 – 3": "Protocolo de Montreal",
-
-  // Radioativos
-  "18 – 83": "Radioativos",
-  "1 – 1": "Radioativos",
-  "1 – 2": "Radioativos",
-  "1 – 3": "Radioativos",
-  "1 – 5": "Radioativos",
-  "3 – 3": "Radioativos",
-  "3 – 9": "Radioativos",
-  "6 – 3": "Radioativos",
-  "15 – 1": "Radioativos",
-  "15 – 12": "Radioativos",
-  "17 – 1": "Radioativos",
-  "17 – 68": "Radioativos",
-  "17 – 69": "Radioativos",
-  "18 – 84": "Radioativos",
-  "21 – 79": "Radioativos",
-  "22 – 2": "Radioativos",
-  "22 – 8": "Radioativos",
-
-  // Remediadores / Dispersantes químicos
-  "15 – 21": "Remediadores / Dispersantes químicos",
-  "18 – 64": "Remediadores / Dispersantes químicos",
-  "21 – 51": "Remediadores / Dispersantes químicos",
-
-  // Resíduos industriais
-  "17 – 57": "Resíduos industriais",
-  "17 – 58": "Resíduos industriais",
-  "17 – 59": "Resíduos industriais",
-  "17 – 60": "Resíduos industriais",
-  "22 – 2": "Resíduos industriais",
-
-  // Saneamento básico
-  "17 – 4": "Saneamento básico",
-  "18 – 74": "Saneamento básico",
-  "21 – 33": "Saneamento básico",
-  "22 – 2": "Saneamento básico",
-  "22 – 3": "Saneamento básico",
-  "22 – 8": "Saneamento básico",
-
-  // Selo Ruído
-  "5 – 3": "Selo Ruído",
-  "21 – 42": "Selo Ruído",
-
-  // Serviços de transporte
-  "18 – 1": "Serviços de transporte",
-  "18 – 2": "Serviços de transporte",
-  "18 – 3": "Serviços de transporte",
-  "18 – 4": "Serviços de transporte",
-  "18 – 14": "Serviços de transporte",
-  "18 – 74": "Serviços de transporte",
-  "21 – 49": "Serviços de transporte",
-
-  // Turismo
-  "19 – 1": "Turismo",
-
-  // Veículo automotor (Proconve/Promot)
-  "4 – 1": "Veículo automotor (Proconve/Promot)",
-  "6 – 1": "Veículo automotor (Proconve/Promot)",
-  "21 – 43": "Veículo automotor (Proconve/Promot)",
-  "21 – 44": "Veículo automotor (Proconve/Promot)",
+  "Abastecimento de combustíveis": ["18-5", "18-6"],
+  Agrotóxicos: ["15-11", "17-61", "18-66", "18-80", "21-5", "21-47", "21-66"],
+  Biotecnologia: ["20-5", "20-35", "20-37", "21-51", "21-66"],
+  "Criação amadorista de passeriformes": ["21-60"],
+  "Convenção de Basileia": ["18-79", "21-40"],
+  "Energia Elétrica": ["17-1", "21-34", "21-35", "21-36", "21-37", "21-46"],
+  "Empreendimentos - Instalação": [
+    "21-75",
+    "22-1",
+    "22-2",
+    "22-3",
+    "22-4",
+    "22-5",
+    "22-6",
+    "22-7",
+    "22-8",
+  ],
+  Fauna: [
+    "10-1",
+    "10-2",
+    "16-15",
+    "20-5",
+    "20-21",
+    "20-23",
+    "20-25",
+    "20-81",
+    "21-52",
+    "21-53",
+    "21-55",
+    "21-56",
+    "21-60",
+    "21-71",
+    "21-72",
+  ],
+  "Fauna doméstica": ["10-1", "10-2", "16-2", "21-74"],
+  "Fauna sinantrópica": ["21-59"],
+  "Fauna invasora": ["20-26", "21-58"],
+  "Fauna - Recursos pesqueiros": [
+    "16-4",
+    "20-5",
+    "20-6",
+    "20-54",
+    "21-69",
+    "21-70",
+  ],
+  "Flora e madeira": [
+    "7-1",
+    "7-2",
+    "7-3",
+    "7-4",
+    "15-2",
+    "15-4",
+    "20-2",
+    "20-5",
+  ],
+  "Importação / Exportação": [
+    "18-8",
+    "18-10",
+    "18-13",
+    "18-17",
+    "18-66",
+    "18-81",
+    "20-21",
+    "20-22",
+    "20-26",
+    "20-63",
+    "20-81",
+    "21-41",
+    "21-42",
+    "21-43",
+    "21-44",
+    "21-45",
+    "21-46",
+    "21-48",
+    "21-49",
+    "21-57",
+    "21-64",
+    "21-67",
+    "21-68",
+    "21-92",
+    "21-93",
+  ],
+  "Logística Reversa": [
+    "15-11",
+    "17-61",
+    "18-66",
+    "18-80",
+    "21-5",
+    "21-47",
+    "21-66",
+  ],
+  "Pilhas e baterias": ["5-1", "17-62", "18-74", "18-80"],
+  Pneumáticos: ["9-6", "17-63", "21-45"],
+  "Óleo lubrificante usado ou contaminado": [
+    "15-2",
+    "15-23",
+    "18-13",
+    "18-14",
+    "18-80",
+  ],
+  "Lâmpadas fluorescentes, de vapor de sódio e mercúrio e de luz mista": [
+    "5-4",
+    "18-74",
+    "21-41",
+  ],
+  Eletroeletrônicos: ["18-74", "18-80"],
+  "Mercúrio metálico": ["1-7", "1-12", "15-20", "18-8"],
+  Mineração: [
+    "1-1",
+    "1-2",
+    "1-3",
+    "1-4",
+    "1-7",
+    "17-58",
+    "17-59",
+    "18-2",
+    "18-4",
+    "22-2",
+    "22-8",
+  ],
+  Pesticidas: ["15-11", "17-61", "18-66", "18-80", "21-5", "21-47", "21-66"],
 };
 
 // Get unique categories for filter dropdown
 const getUniqueCategories = () => {
-  const categories = new Set(Object.values(FTE_CODE_CATEGORIES));
-  return Array.from(categories).sort();
+  return Object.keys(FTE_CODE_CATEGORIES).sort();
+};
+
+// Function to get FTE category from code using the new structure
+const getFteCategory = (codigo) => {
+  if (!codigo || codigo === "N/A") return "Sem categoria";
+
+  // Transform the code to match the format in the categories
+  const transformedCode = codigo.replace(/ – /g, "-");
+
+  // Find which category contains this code
+  for (const [category, codes] of Object.entries(FTE_CODE_CATEGORIES)) {
+    if (codes.includes(transformedCode)) {
+      return category;
+    }
+  }
+
+  return "Sem categoria";
 };
 
 function App() {
@@ -652,10 +478,6 @@ function App() {
     return FTE_CODE_TITLES[codigo] || "Título não disponível";
   };
 
-  // Function to get FTE category from code
-  const getFteCategory = (codigo) => {
-    return FTE_CODE_CATEGORIES[codigo] || "Sem categoria";
-  };
   const [fteData, setFteData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -841,16 +663,11 @@ function App() {
 
     // Category filter
     if (filterCategory !== "all") {
-      if (filterCategory === "mining" && code.includes("1")) return true;
-      if (filterCategory === "chemical" && code.includes("15")) return true;
-      if (filterCategory === "food" && code.includes("16")) return true;
-      if (filterCategory === "utility" && code.includes("17")) return true;
-      if (filterCategory === "transport" && code.includes("18")) return true;
-      if (filterCategory === "tourism" && code.includes("19")) return true;
-      if (filterCategory === "natural-resources" && code.includes("20"))
-        return true;
-      if (filterCategory === "control" && code.includes("21")) return true;
-      return false;
+      // Use the new FTE_CODE_CATEGORIES structure
+      const category = getFteCategory(code);
+      if (category !== filterCategory) {
+        return false;
+      }
     }
 
     return true;
@@ -890,28 +707,11 @@ function App() {
         cnaeTypeCounts[type] = (cnaeTypeCounts[type] || 0) + 1;
       });
 
-      // Count by traditional categories
-      if (code.includes("1"))
-        categoryCounts["Mining"] = (categoryCounts["Mining"] || 0) + 1;
-      if (code.includes("15"))
-        categoryCounts["Chemical"] = (categoryCounts["Chemical"] || 0) + 1;
-      if (code.includes("16"))
-        categoryCounts["Food & Beverage"] =
-          (categoryCounts["Food & Beverage"] || 0) + 1;
-      if (code.includes("17"))
-        categoryCounts["Utility Services"] =
-          (categoryCounts["Utility Services"] || 0) + 1;
-      if (code.includes("18"))
-        categoryCounts["Transport & Trade"] =
-          (categoryCounts["Transport & Trade"] || 0) + 1;
-      if (code.includes("19"))
-        categoryCounts["Tourism"] = (categoryCounts["Tourism"] || 0) + 1;
-      if (code.includes("20"))
-        categoryCounts["Natural Resources"] =
-          (categoryCounts["Natural Resources"] || 0) + 1;
-      if (code.includes("21"))
-        categoryCounts["Environmental Control"] =
-          (categoryCounts["Environmental Control"] || 0) + 1;
+      // Count by traditional categories (simplified)
+      const category = getFteCategory(code);
+      if (category !== "Sem categoria") {
+        categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+      }
 
       // Count by environmental themes
       const theme = getFteCategory(code);
@@ -960,6 +760,38 @@ function App() {
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", "fte_statistics.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportFilteredResultsToCSV = () => {
+    let csvContent = "data:text/csv;charset=utf-8,";
+
+    csvContent += "FTE Filtered Results\n";
+    csvContent += `Total Results,${filteredData.length}\n`;
+    csvContent += `Search Term,${searchTerm || "N/A"}\n`;
+    csvContent += `FTE Code Search,${fteCodeSearch || "N/A"}\n`;
+    csvContent += `Category Filter,${
+      filterCategory !== "all" ? filterCategory : "N/A"
+    }\n`;
+    csvContent += `Theme Filter,${categoryFilter || "N/A"}\n\n`;
+
+    csvContent += "Código,Title,Category,Version,URL\n";
+    filteredData.forEach((item) => {
+      const codigo = item.data?.metadata?.["Código:"] || "N/A";
+      const title = getFteTitle(codigo);
+      const category = getFteCategory(codigo);
+      const version = item.data?.metadata?.["Versão FTE:"] || "N/A";
+      const url = item.url || "N/A";
+
+      csvContent += `"${codigo}","${title}","${category}","${version}","${url}"\n`;
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "fte_filtered_results.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -1423,9 +1255,9 @@ function App() {
             >
               <CardContent>
                 <Typography variant="h4" component="div">
-                  {Object.keys(stats.categoryCounts).length}
+                  {Object.keys(FTE_CODE_CATEGORIES).length}
                 </Typography>
-                <Typography variant="body2">Categorias</Typography>
+                <Typography variant="body2">Temas Ambientais</Typography>
               </CardContent>
             </Card>
           </Grid>
@@ -1489,29 +1321,7 @@ function App() {
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
                   <MenuItem value="all">Todas</MenuItem>
-                  <MenuItem value="mining">Mineração</MenuItem>
-                  <MenuItem value="chemical">Química</MenuItem>
-                  <MenuItem value="food">Alimentos</MenuItem>
-                  <MenuItem value="utility">Serviços</MenuItem>
-                  <MenuItem value="transport">Transporte</MenuItem>
-                  <MenuItem value="tourism">Turismo</MenuItem>
-                  <MenuItem value="natural-resources">
-                    Recursos Naturais
-                  </MenuItem>
-                  <MenuItem value="control">Controle Ambiental</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={2}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Tema Ambiental</InputLabel>
-                <Select
-                  value={categoryFilter}
-                  label="Tema Ambiental"
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                >
-                  <MenuItem value="">Todos os temas</MenuItem>
-                  {getUniqueCategories().map((category) => (
+                  {Object.keys(FTE_CODE_CATEGORIES).map((category) => (
                     <MenuItem key={category} value={category}>
                       {category}
                     </MenuItem>
@@ -1519,6 +1329,7 @@ function App() {
                 </Select>
               </FormControl>
             </Grid>
+
             <Grid item xs={12} md={4}>
               <Stack direction="row" spacing={1} alignItems="center">
                 <ToggleButtonGroup
@@ -1555,6 +1366,34 @@ function App() {
               </Stack>
             </Grid>
           </Grid>
+        </Box>
+
+        {/* Quick Filter Chips */}
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            Filtros rápidos:
+          </Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            {[
+              "Mineração",
+              "Agrotóxicos",
+              "Energia Elétrica",
+              "Fauna",
+              "Flora e madeira",
+            ].map((theme) => (
+              <Chip
+                key={theme}
+                label={theme}
+                size="small"
+                variant={categoryFilter === theme ? "filled" : "outlined"}
+                color={categoryFilter === theme ? "primary" : "default"}
+                onClick={() =>
+                  setFilterCategory(categoryFilter === theme ? "all" : theme)
+                }
+                sx={{ cursor: "pointer" }}
+              />
+            ))}
+          </Box>
         </Box>
 
         {/* Results Summary */}
@@ -1597,7 +1436,16 @@ function App() {
                 onClick={exportToCSV}
                 startIcon={<DownloadIcon />}
               >
-                Exportar CSV
+                Estatísticas CSV
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={exportFilteredResultsToCSV}
+                startIcon={<DownloadIcon />}
+                disabled={filteredData.length === 0}
+              >
+                Resultados CSV
               </Button>
             </Stack>
           </Box>
@@ -1633,19 +1481,12 @@ function App() {
                   >
                     <Box>
                       <Typography variant="h6" component="h3" gutterBottom>
-                        <CodeIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-                        FTE{" "}
                         {transformFteCode(
                           item.data?.metadata?.["Código:"] || "N/A"
                         )}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        color="primary"
-                        sx={{ mb: 1, fontStyle: "italic" }}
-                      >
                         {getFteTitle(item.data?.metadata?.["Código:"] || "N/A")}
                       </Typography>
+
                       <Typography
                         variant="body2"
                         color="text.secondary"
@@ -1761,16 +1602,9 @@ function App() {
                   >
                     <Box>
                       <Typography variant="h5" component="h3" gutterBottom>
-                        <CodeIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-                        FTE - {group.codigoDisplay}
+                        {group.codigoDisplay} {getFteTitle(codigo)}
                       </Typography>
-                      <Typography
-                        variant="body1"
-                        color="primary"
-                        sx={{ mb: 1, fontStyle: "italic" }}
-                      >
-                        {getFteTitle(codigo)}
-                      </Typography>
+
                       <Typography
                         variant="body2"
                         color="text.secondary"
